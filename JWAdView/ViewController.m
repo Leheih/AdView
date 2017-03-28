@@ -76,6 +76,7 @@ static NSString *itemId = @"testItem";
     return CGPointMake(targetX, offset.y);
 }
 
+#pragma mark -懒加载
 - (NSMutableArray *)dataArray {
     
     if (_dataArray == nil) {
