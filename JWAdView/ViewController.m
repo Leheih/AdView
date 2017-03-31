@@ -19,6 +19,8 @@
 @property (nonatomic,strong) NSMutableArray *dataArray;
 @property (nonatomic,assign) NSInteger pageIndex;
 
+@property (nonatomic,strong) NSTimer *timer;
+
 @end
 
 @implementation ViewController
@@ -28,6 +30,46 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     [self.view addSubview:self.TestCollectView];
+    
+    [self addTimer]; // 添加定时器
+}
+
+#pragma mark - 自动滚动
+- (void)addTimer {
+    
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:2 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        
+        CGPoint pInView = [self.view convertPoint:self.TestCollectView.center toView:self.TestCollectView];
+        
+        NSIndexPath *currentIndexPath = [self.TestCollectView indexPathForItemAtPoint:pInView];
+        NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:3];
+        if (self.dataArray.count) {
+            [self.TestCollectView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+        }
+        
+        
+        //下一个展示位置
+        NSInteger nextItem = currentIndexPathReset.item + 1;
+        NSInteger nextSection = currentIndexPathReset.section;
+        if (nextItem == self.dataArray.count) {
+            nextItem = 0;
+            nextSection ++;
+        }
+        
+        NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];
+        
+        [self.TestCollectView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+        
+        NSLog(@"%ld  %ld",currentIndexPath.item,currentIndexPath.section);
+        
+    }];
+    
+}
+
+#pragma mark -
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    
+    return 5;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -43,19 +85,13 @@ static NSString *itemId = @"testItem";
     return item;
 }
 
+#pragma mark - 手动滚动
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     CGPoint targetOffset = [self nearestTargetOffsetForOffset:*targetContentOffset];
     
 //    NSLog(@"-----%lf",targetOffset.x);
     targetContentOffset->x = targetOffset.x;
     targetContentOffset->y = targetOffset.y;
-}
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    CGFloat pageSize = 190;
-    NSInteger page = roundf(scrollView.contentOffset.x / pageSize);
-    self.pageIndex = page;
-    NSLog(@"--------%ld",self.pageIndex);
 }
 
 - (CGPoint)nearestTargetOffsetForOffset:(CGPoint)offset
@@ -71,16 +107,47 @@ static NSString *itemId = @"testItem";
     } else {
         page2 = self.pageIndex - 1;
     }
-
+    
     CGFloat targetX = pageSize * page2;
     return CGPointMake(targetX, offset.y);
 }
+
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    
+    
+    CGPoint pInView = [self.view convertPoint:self.TestCollectView.center toView:self.TestCollectView];
+    
+    NSIndexPath *currentIndexPath = [self.TestCollectView indexPathForItemAtPoint:pInView];
+    NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:3];
+    if (self.dataArray.count) {
+        [self.TestCollectView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    }
+    
+    
+    [self addTimer];
+    
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    
+    
+    [self.timer invalidate];
+    self.timer = nil;
+    
+    CGFloat pageSize = 190;
+    NSInteger page = roundf(scrollView.contentOffset.x / pageSize);
+    self.pageIndex = page;
+    NSLog(@"--------%ld",self.pageIndex);
+}
+
+
 
 #pragma mark -懒加载
 - (NSMutableArray *)dataArray {
     
     if (_dataArray == nil) {
-        NSArray *arr = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10"];
+        NSArray *arr = @[@"1",@"2",@"3",@"4"];
         _dataArray = [NSMutableArray arrayWithArray:arr];
     }
     return _dataArray;
@@ -102,6 +169,9 @@ static NSString *itemId = @"testItem";
         flowLayout.minimumInteritemSpacing = 0.01f;
         
         [_TestCollectView registerNib:[UINib nibWithNibName:NSStringFromClass([TestCollectionViewCell class]) bundle:nil] forCellWithReuseIdentifier:itemId];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:3];
+        [self.TestCollectView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     }
     return _TestCollectView;
 }

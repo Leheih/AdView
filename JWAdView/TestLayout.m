@@ -20,9 +20,9 @@
     [super prepareLayout];
     
     self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    // 设置内边距
-    CGFloat inset = (self.collectionView.frame.size.width - self.itemSize.width) * 0.5;
-    self.sectionInset = UIEdgeInsetsMake(0, inset, 0, inset);
+//    // 设置内边距
+//    CGFloat inset = (self.collectionView.frame.size.width - self.itemSize.width) * 0.5;
+//    self.sectionInset = UIEdgeInsetsMake(0, inset, 0, inset);
     
 }
 
