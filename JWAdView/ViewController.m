@@ -109,7 +109,7 @@ static NSString *itemId = @"testItem";
     }
     
     CGFloat targetX = pageSize * page2;
-    return CGPointMake(targetX, offset.y);
+    return CGPointMake(targetX - 80.0, offset.y);
 }
 
 
