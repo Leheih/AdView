@@ -13,6 +13,9 @@
 
 #define WIDTH [UIScreen mainScreen].bounds.size.width
 #define HEIGHT [UIScreen mainScreen].bounds.size.height
+#define ITEM_WIDTH 190
+#define ITRM_HEIGHT 200
+
 @interface ViewController () <UICollectionViewDelegate,UICollectionViewDataSource>
 
 @property (nonatomic,strong) UICollectionView *TestCollectView;
@@ -96,7 +99,7 @@ static NSString *itemId = @"testItem";
 
 - (CGPoint)nearestTargetOffsetForOffset:(CGPoint)offset
 {
-    CGFloat pageSize = 190;
+    CGFloat pageSize = ITEM_WIDTH;
     NSInteger page = roundf(offset.x / pageSize);
     
     NSInteger page2;
@@ -109,7 +112,8 @@ static NSString *itemId = @"testItem";
     }
     
     CGFloat targetX = pageSize * page2;
-    return CGPointMake(targetX - 80.0, offset.y);
+    CGFloat inset = (self.TestCollectView.frame.size.width - ITEM_WIDTH) * 0.5;
+    return CGPointMake(targetX - inset, offset.y);
 }
 
 
@@ -135,7 +139,7 @@ static NSString *itemId = @"testItem";
     [self.timer invalidate];
     self.timer = nil;
     
-    CGFloat pageSize = 190;
+    CGFloat pageSize = ITEM_WIDTH;
     NSInteger page = roundf(scrollView.contentOffset.x / pageSize);
     self.pageIndex = page;
     NSLog(@"--------%ld",self.pageIndex);
@@ -164,7 +168,7 @@ static NSString *itemId = @"testItem";
         _TestCollectView.backgroundColor = [UIColor grayColor];
         
         flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        flowLayout.itemSize = CGSizeMake(190, 200);
+        flowLayout.itemSize = CGSizeMake(ITEM_WIDTH, ITRM_HEIGHT);
         flowLayout.minimumLineSpacing = 0.01f;
         flowLayout.minimumInteritemSpacing = 0.01f;
         
