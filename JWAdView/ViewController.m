@@ -45,9 +45,11 @@
     sliderView.localizationImageNamesGroup = [NSArray arrayWithArray:imageArr];
     sliderView.infiniteLoop = YES;
     sliderView.delegate = self;
+    sliderView.autoScroll = YES;
+    sliderView.autoScrollTimeInterval = 2.5;
+    sliderView.itemSize = CGSizeMake(200, 100);
+    sliderView.pageSpace = 10.0f;
     [self.view addSubview:sliderView];
-    
-    
 }
 
 - (void)BDSSliderView:(BDSSliderView *)sliderView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -135,21 +137,21 @@ static NSString *itemId = @"testItem";
 }
 
 
-//-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-//
-//
-//    CGPoint pInView = [self.view convertPoint:self.TestCollectView.center toView:self.TestCollectView];
-//
-//    NSIndexPath *currentIndexPath = [self.TestCollectView indexPathForItemAtPoint:pInView];
-//    NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:3];
-//    if (self.dataArray.count) {
-//        [self.TestCollectView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-//    }
-//
-//
-//    [self addTimer];
-//
-//}
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+
+
+    CGPoint pInView = [self.view convertPoint:self.TestCollectView.center toView:self.TestCollectView];
+
+    NSIndexPath *currentIndexPath = [self.TestCollectView indexPathForItemAtPoint:pInView];
+    NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:3];
+    if (self.dataArray.count) {
+        [self.TestCollectView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    }
+
+
+    [self addTimer];
+
+}
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
 

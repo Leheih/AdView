@@ -18,6 +18,8 @@ UICollectionViewDataSource>
 @property (assign, nonatomic) NSInteger totalItemsCount;
 @property (assign, nonatomic) NSInteger pageIndex;
 @property (assign, nonatomic) BOOL isScrollToCenter;
+@property (strong, nonatomic) NSTimer *timer;
+@property (strong, nonatomic) TestLayout *flowLayout;
 
 @end
 
@@ -35,9 +37,10 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 
 - (void)initialization {
     self.infiniteLoop = YES;
+    self.autoScroll = YES;
     self.pageSpace = 10.0f;
     self.itemSize = CGSizeMake(self.frame.size.width * 0.9, self.frame.size.height * 0.9);
-    
+    self.autoScrollTimeInterval = 2.0;
 }
 
 - (void)layoutSubviews {
@@ -69,11 +72,40 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
     }
 }
 
+#pragma mark - 自动滚动
+
+- (void)addTimer {
+    [self invalidateTimer];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:self.autoScrollTimeInterval target:self selector:@selector(autoScrollNextPage) userInfo:nil repeats:YES];
+    [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+}
+
+- (void)autoScrollNextPage {
+    //下一个展示位置
+    NSInteger nextItem = [self currentIndexPathReset].item + 1;
+    if (nextItem >= self.totalItemsCount) {
+        [self scrollToCenter];
+        return;
+    }
+    NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:0];
+    [self.collectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+}
+
+- (NSIndexPath *)currentIndexPathReset {
+    CGPoint pInView = [self convertPoint:self.collectionView.center toView:self.collectionView];
+    NSIndexPath *currentIndexPath = [self.collectionView indexPathForItemAtPoint:pInView];
+    return [NSIndexPath indexPathForItem:currentIndexPath.item inSection:0];
+}
+
+- (void)invalidateTimer {
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
 #pragma mark - 手动滚动
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     CGPoint targetOffset = [self nearestTargetOffsetForOffset:*targetContentOffset];
-    //    NSLog(@"-----%lf",targetOffset.x);
     targetContentOffset->x = targetOffset.x;
     targetContentOffset->y = targetOffset.y;
 }
@@ -81,7 +113,6 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 - (CGPoint)nearestTargetOffsetForOffset:(CGPoint)offset {
     CGFloat pageSize = self.itemSize.width + self.pageSpace;
     NSInteger page = roundf(offset.x / pageSize);
-    NSLog(@"111--%lf",offset.x);
     NSInteger nextPage;
     if (page > self.pageIndex) {
         nextPage = self.pageIndex + 1;
@@ -99,32 +130,17 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
     return CGPointMake(targetX - inset, offset.y);
 }
 
-
-//-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-//
-//
-//    CGPoint pInView = [self.view convertPoint:self.TestCollectView.center toView:self.TestCollectView];
-//
-//    NSIndexPath *currentIndexPath = [self.TestCollectView indexPathForItemAtPoint:pInView];
-//    NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:3];
-//    if (self.dataArray.count) {
-//        [self.TestCollectView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-//    }
-//
-//
-//    [self addTimer];
-//
-//}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+//    [self.collectionView scrollToItemAtIndexPath:[self currentIndexPathReset] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    self.autoScroll = self.autoScroll;
+}
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    
-//    [self.timer invalidate];
-//    self.timer = nil;
-    
+    [self invalidateTimer];
     CGFloat pageSize = self.itemSize.width + self.pageSpace;
     NSInteger page = roundf(scrollView.contentOffset.x / pageSize);
     self.pageIndex = page;
-    if (page + 1 >= self.totalItemsCount) {
+    if (page + 1 >= self.totalItemsCount && self.infiniteLoop == YES) {
         [self scrollToCenter];
         self.isScrollToCenter = YES;
     }
@@ -134,7 +150,7 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 
 - (void)setLocalizationImageNamesGroup:(NSArray *)localizationImageNamesGroup {
     _localizationImageNamesGroup = localizationImageNamesGroup;
-    self.totalItemsCount = self.infiniteLoop ? localizationImageNamesGroup.count * 2 : localizationImageNamesGroup.count;
+    self.totalItemsCount = self.infiniteLoop ? localizationImageNamesGroup.count * 100 : localizationImageNamesGroup.count;
     [self.collectionView reloadData];
 }
 
@@ -145,22 +161,52 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
     }
 }
 
+- (void)setAutoScroll:(BOOL)autoScroll{
+    _autoScroll = autoScroll;
+    [self invalidateTimer];
+    if (autoScroll) {
+        [self addTimer];
+    }
+}
+
+- (void)setAutoScrollTimeInterval:(CGFloat)autoScrollTimeInterval {
+    _autoScrollTimeInterval = autoScrollTimeInterval;
+    [self setAutoScroll:self.autoScroll];
+}
+
+- (void)setItemSize:(CGSize)itemSize {
+    _itemSize = itemSize;
+    [self updateFlowLayout];
+}
+
+- (void)setPageSpace:(CGFloat)pageSpace {
+    _pageSpace = pageSpace;
+    [self updateFlowLayout];
+}
+
+- (void)updateFlowLayout {
+    self.flowLayout.itemSize = self.itemSize;
+    self.flowLayout.minimumLineSpacing = self.pageSpace;
+    self.flowLayout.minimumInteritemSpacing = 0.01f;
+    self.collectionView.contentInset = UIEdgeInsetsMake(0, (self.frame.size.width - self.itemSize.width ) / 2.0, 0, (self.frame.size.width - self.itemSize.width ) / 2.0);
+}
+
 #pragma mark - lazy
+
+- (TestLayout *)flowLayout {
+    if (!_flowLayout) {
+        _flowLayout = [[TestLayout alloc] init];
+        _flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    }
+    return _flowLayout;
+}
 
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
-        TestLayout *flowLayout = [[TestLayout alloc] init];
-        flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        flowLayout.itemSize = self.itemSize;
-        flowLayout.minimumLineSpacing = self.pageSpace;
-        flowLayout.minimumInteritemSpacing = 0.01f;
-        
-        _collectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:flowLayout];
+        _collectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:self.flowLayout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.backgroundColor = [UIColor grayColor];
-        _collectionView.contentInset = UIEdgeInsetsMake(0, (self.frame.size.width - self.itemSize.width ) / 2.0, 0, (self.frame.size.width - self.itemSize.width ) / 2.0);
-        
         [_collectionView registerNib:[UINib nibWithNibName:NSStringFromClass([TestCollectionViewCell class]) bundle:nil] forCellWithReuseIdentifier:BDSSliderViewCellId];
     }
     return _collectionView;
