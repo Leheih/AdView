@@ -17,7 +17,7 @@
 #define ITEM_WIDTH 200
 #define ITRM_HEIGHT 200
 
-@interface ViewController () <UICollectionViewDelegate,UICollectionViewDataSource>
+@interface ViewController () <UICollectionViewDelegate,UICollectionViewDataSource,BDSSliderViewDelagete>
 
 @property (nonatomic,strong) UICollectionView *TestCollectView;
 @property (nonatomic,strong) NSMutableArray *dataArray;
@@ -42,11 +42,16 @@
     
     BDSSliderView *sliderView = [[BDSSliderView alloc] initWithFrame:CGRectMake(20, 100, 300, 200)];
     NSArray *imageArr = @[@"1",@"4",@"4",@"4",@"4",@"4"];
-    sliderView.localizationImageNamesGroup = imageArr;
-    sliderView.infiniteLoop = NO;
+    sliderView.localizationImageNamesGroup = [NSArray arrayWithArray:imageArr];
+    sliderView.infiniteLoop = YES;
+    sliderView.delegate = self;
     [self.view addSubview:sliderView];
     
     
+}
+
+- (void)BDSSliderView:(BDSSliderView *)sliderView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%ld",indexPath.row);
 }
 
 #pragma mark - 自动滚动
@@ -155,7 +160,7 @@ static NSString *itemId = @"testItem";
     CGFloat pageSize = ITEM_WIDTH + 10;
     NSInteger page = roundf(scrollView.contentOffset.x / pageSize);
     self.pageIndex = page;
-    NSLog(@"--------%ld",self.pageIndex);
+//    NSLog(@"--------%ld",self.pageIndex);
 }
 
 

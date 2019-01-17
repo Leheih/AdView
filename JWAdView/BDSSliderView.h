@@ -10,15 +10,23 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class BDSSliderView;
+@protocol BDSSliderViewDelagete <NSObject>
+
+- (void)BDSSliderView:(BDSSliderView *)sliderView didSelectItemAtIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
 @interface BDSSliderView : UIView
 
-@property (assign, nonatomic) CGSize itemSize;
 /** 本地图片数组 */
 @property (nonatomic, strong) NSArray *localizationImageNamesGroup;
 /** 是否无限循环,默认Yes */
 @property (nonatomic,assign) BOOL infiniteLoop;
-
+@property (assign, nonatomic) CGSize itemSize;
 @property (assign, nonatomic) CGFloat pageSpace;
+
+@property (weak, nonatomic) id<BDSSliderViewDelagete> delegate;
 
 @end
 
