@@ -8,7 +8,6 @@
 
 #import "BDSSliderView.h"
 #import "TestLayout.h"
-#import "TestCollectionViewCell.h"
 
 @interface BDSSliderView () <
 UICollectionViewDelegate,
@@ -49,6 +48,7 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 }
 
 - (void)scrollToCenter {
+    if (self.localizationImageNamesGroup.count == 0) return;
     NSInteger targetIndex = self.infiniteLoop == YES ? self.totalItemsCount * 0.5 : 0;
     [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:targetIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
@@ -60,9 +60,9 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    TestCollectionViewCell *item = [collectionView dequeueReusableCellWithReuseIdentifier:BDSSliderViewCellId forIndexPath:indexPath];
+    BDSSliderViewCell *item = [collectionView dequeueReusableCellWithReuseIdentifier:BDSSliderViewCellId forIndexPath:indexPath];
     NSInteger index = indexPath.item % self.localizationImageNamesGroup.count;
-    item.lb.text = [NSString stringWithFormat:@"%ld",index];
+    item.imageView.image = [UIImage imageNamed:self.localizationImageNamesGroup[index]];
     return item;
 }
 
@@ -131,7 +131,6 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-//    [self.collectionView scrollToItemAtIndexPath:[self currentIndexPathReset] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     self.autoScroll = self.autoScroll;
 }
 
@@ -151,7 +150,7 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 - (void)setLocalizationImageNamesGroup:(NSArray *)localizationImageNamesGroup {
     _localizationImageNamesGroup = localizationImageNamesGroup;
     self.totalItemsCount = self.infiniteLoop ? localizationImageNamesGroup.count * 100 : localizationImageNamesGroup.count;
-    [self.collectionView reloadData];
+//    [self.collectionView reloadData];
 }
 
 - (void)setInfiniteLoop:(BOOL)infiniteLoop {
@@ -191,6 +190,12 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
     self.collectionView.contentInset = UIEdgeInsetsMake(0, (self.frame.size.width - self.itemSize.width ) / 2.0, 0, (self.frame.size.width - self.itemSize.width ) / 2.0);
 }
 
++ (BDSSliderView *)sliderViewWithFrame:(CGRect)frame localizationImageNamesGroup:(NSArray *)localizationImageNamesGroup {
+    BDSSliderView *sliderView = [[BDSSliderView alloc] initWithFrame:frame];
+    sliderView.localizationImageNamesGroup = localizationImageNamesGroup;
+    return sliderView;
+}
+
 #pragma mark - lazy
 
 - (TestLayout *)flowLayout {
@@ -207,10 +212,30 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.backgroundColor = [UIColor grayColor];
-        [_collectionView registerNib:[UINib nibWithNibName:NSStringFromClass([TestCollectionViewCell class]) bundle:nil] forCellWithReuseIdentifier:BDSSliderViewCellId];
+        [_collectionView registerClass:[BDSSliderViewCell class] forCellWithReuseIdentifier:BDSSliderViewCellId];
     }
     return _collectionView;
 }
 
+@end
+
+@implementation BDSSliderViewCell
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        [self setupImageView];
+    }
+    return self;
+}
+
+- (void)setupImageView {
+    self.imageView = [[UIImageView alloc] init];
+    [self.contentView addSubview:self.imageView];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.imageView.frame = self.bounds;
+}
 
 @end

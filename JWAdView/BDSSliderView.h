@@ -33,6 +33,22 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) CGFloat pageSpace;
 @property (weak, nonatomic) id<BDSSliderViewDelagete> delegate;
 
+
+/**
+ 本地图片卡片式轮播初始化
+
+ @param frame frame
+ @param localizationImageNamesGroup 本地图片数组
+ @return 轮播view
+ */
++ (BDSSliderView *)sliderViewWithFrame:(CGRect)frame localizationImageNamesGroup:(NSArray *)localizationImageNamesGroup;
+
 @end
 
 NS_ASSUME_NONNULL_END
+
+@interface BDSSliderViewCell : UICollectionViewCell
+
+@property (strong, nonatomic) UIImageView *imageView;
+
+@end
