@@ -35,8 +35,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) CGSize itemSize;
 /** item之间水平方向间距,默认10 */
 @property (assign, nonatomic) CGFloat pageSpace;
-@property (weak, nonatomic) id<BDSSliderViewDelagete> delegate;
+/** 是否在只有一张图时隐藏pagecontrol，默认为YES */
+@property(nonatomic) BOOL hidesForSinglePage;
+/** 是否显示分页控件 */
+@property (nonatomic, assign) BOOL showPageControl;
 
+@property (weak, nonatomic) id<BDSSliderViewDelagete> delegate;
 
 /**
  本地图片卡片式轮播初始化
@@ -63,5 +67,9 @@ NS_ASSUME_NONNULL_END
 @interface BDSSliderViewCell : UICollectionViewCell
 
 @property (strong, nonatomic) UIImageView *imageView;
+
+@end
+
+@interface BDSSliderViewPageControl : UIPageControl
 
 @end

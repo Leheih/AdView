@@ -21,6 +21,7 @@ UICollectionViewDataSource>
 @property (strong, nonatomic) NSTimer *timer;
 @property (strong, nonatomic) TestLayout *flowLayout;
 @property (strong, nonatomic) NSArray<NSString *> *imagePathsGroup;
+@property (strong, nonatomic) BDSSliderViewPageControl *pageControl;
 
 @end
 
@@ -42,17 +43,21 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
     self.pageSpace = 10.0f;
     self.itemSize = CGSizeMake(self.frame.size.width * 0.9, self.frame.size.height * 0.9);
     self.autoScrollTimeInterval = 2.0;
+    self.hidesForSinglePage = YES;
+    self.showPageControl = YES;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self scrollToCenter];
+    self.pageControl.frame = CGRectMake(0, self.frame.size.height - 20.0, self.frame.size.width, 20);
+    self.pageControl.backgroundColor = [UIColor redColor];
+    self.pageControl.hidden = !(self.showPageControl);
 }
 
 - (void)scrollToCenter {
     if (self.imagePathsGroup.count == 0) return;
     NSInteger targetIndex = self.infiniteLoop == YES ? self.totalItemsCount * 0.5 : 0;
-    [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:targetIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+    [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:targetIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
 }
 
 #pragma mark - UICollectionViewDelegate,UICollectionViewDataSource
@@ -145,6 +150,11 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
     self.autoScroll = self.autoScroll;
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (!self.imagePathsGroup.count) return;
+    self.pageControl.currentPage = [self currentIndex];
+}
+
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [self invalidateTimer];
     CGFloat pageSize = self.itemSize.width + self.pageSpace;
@@ -171,6 +181,11 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 - (void)setImagePathsGroup:(NSArray *)imagePathsGroup {
     _imagePathsGroup = imagePathsGroup;
     self.totalItemsCount = self.infiniteLoop ? imagePathsGroup.count * 100 : imagePathsGroup.count;
+    if (imagePathsGroup.count > 0) {
+        [self updatePageControl];
+    }
+    [self.collectionView reloadData];
+    [self scrollToCenter];
 }
 
 - (void)setInfiniteLoop:(BOOL)infiniteLoop {
@@ -203,11 +218,39 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
     [self updateFlowLayout];
 }
 
+- (void)setShowPageControl:(BOOL)showPageControl {
+    _showPageControl = showPageControl;
+    self.pageControl.hidden = !showPageControl;
+}
+
 - (void)updateFlowLayout {
     self.flowLayout.itemSize = self.itemSize;
     self.flowLayout.minimumLineSpacing = self.pageSpace;
     self.flowLayout.minimumInteritemSpacing = 0.01f;
     self.collectionView.contentInset = UIEdgeInsetsMake(0, (self.frame.size.width - self.itemSize.width ) / 2.0, 0, (self.frame.size.width - self.itemSize.width ) / 2.0);
+}
+
+- (void)updatePageControl {
+    if (self.pageControl) {
+        [self.pageControl removeFromSuperview];
+    }
+    if (self.imagePathsGroup.count == 0) {
+        return;
+    }
+    if (self.imagePathsGroup.count == 1 && self.hidesForSinglePage == YES) {
+        return;
+    }
+    self.pageControl.pageIndicatorTintColor = [UIColor whiteColor];
+    self.pageControl.currentPageIndicatorTintColor = [UIColor greenColor];
+    self.pageControl.numberOfPages = self.imagePathsGroup.count;
+    self.pageControl.currentPage = [self currentIndex];
+    [self addSubview:self.pageControl];
+}
+
+- (NSInteger)currentIndex {
+    if (!self.imagePathsGroup.count) return 0;
+    NSIndexPath *indexPath = [self currentIndexPathReset];
+    return MAX(0, indexPath.item % self.imagePathsGroup.count);
 }
 
 + (BDSSliderView *)sliderViewWithFrame:(CGRect)frame localizationImageNamesGroup:(NSArray *)localizationImageNamesGroup {
@@ -243,6 +286,13 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
     return _collectionView;
 }
 
+- (BDSSliderViewPageControl *)pageControl {
+    if (!_pageControl) {
+        _pageControl = [[BDSSliderViewPageControl alloc] init];
+    }
+    return _pageControl;
+}
+
 @end
 
 @implementation BDSSliderViewCell
@@ -263,5 +313,10 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
     [super layoutSubviews];
     self.imageView.frame = self.bounds;
 }
+
+@end
+
+@implementation BDSSliderViewPageControl
+
 
 @end

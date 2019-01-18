@@ -10,12 +10,7 @@
 #import "BDSSliderView.h"
 
 @interface ViewController () <BDSSliderViewDelagete>
-
-@property (nonatomic,strong) UICollectionView *TestCollectView;
-@property (nonatomic,strong) NSMutableArray *dataArray;
-@property (nonatomic,assign) NSInteger pageIndex;
-
-@property (nonatomic,strong) NSTimer *timer;
+@property (strong, nonatomic) BDSSliderView *sliderVeiw;
 
 @end
 
@@ -42,10 +37,16 @@
     
 //    sliderView.imageURLStringsGroup = imagesURLStrings;
     [self.view addSubview:sliderView];
+    self.sliderVeiw = sliderView;
 }
 
 - (void)BDSSliderView:(BDSSliderView *)sliderView didSelectItemAtIndex:(NSInteger)index {
     NSLog(@"%ld",index);
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    NSArray *imageArr = @[@"1",@"3"];
+    self.sliderVeiw.localizationImageNamesGroup = imageArr;
 }
 
 @end
