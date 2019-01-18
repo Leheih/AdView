@@ -15,11 +15,8 @@
 }
 
 - (void)prepareLayout {
-    
     [super prepareLayout];
-    
     self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    
 }
 
 - (CGSize)collectionViewContentSize {

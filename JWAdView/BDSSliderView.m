@@ -45,13 +45,13 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
     self.autoScrollTimeInterval = 2.0;
     self.hidesForSinglePage = YES;
     self.showPageControl = YES;
+    self.pageDotColor = [UIColor whiteColor];
+    self.currentPageDotColor = [UIColor greenColor];
+    self.pageControlBottomOffset = 0.0f;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.pageControl.frame = CGRectMake(0, self.frame.size.height - 20.0, self.frame.size.width, 20);
-    self.pageControl.backgroundColor = [UIColor redColor];
-    self.pageControl.hidden = !(self.showPageControl);
 }
 
 - (void)scrollToCenter {
@@ -223,6 +223,26 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
     self.pageControl.hidden = !showPageControl;
 }
 
+- (void)setCurrentPageDotColor:(UIColor *)currentPageDotColor {
+    _currentPageDotColor = currentPageDotColor;
+    [self updatePageControl];
+}
+
+- (void)setPageDotColor:(UIColor *)pageDotColor {
+    _pageDotColor = pageDotColor;
+    [self updatePageControl];
+}
+
+- (void)setPageDotImage:(UIImage *)pageDotImage {
+    _pageDotImage = pageDotImage;
+    [self updatePageControl];
+}
+
+- (void)setPageControlBottomOffset:(CGFloat)pageControlBottomOffset {
+    _pageControlBottomOffset = pageControlBottomOffset;
+    [self updatePageControl];
+}
+
 - (void)updateFlowLayout {
     self.flowLayout.itemSize = self.itemSize;
     self.flowLayout.minimumLineSpacing = self.pageSpace;
@@ -240,10 +260,14 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
     if (self.imagePathsGroup.count == 1 && self.hidesForSinglePage == YES) {
         return;
     }
-    self.pageControl.pageIndicatorTintColor = [UIColor whiteColor];
-    self.pageControl.currentPageIndicatorTintColor = [UIColor greenColor];
+    self.pageControl.pageIndicatorTintColor = self.pageDotColor;
+    self.pageControl.currentPageIndicatorTintColor = self.currentPageDotColor;
     self.pageControl.numberOfPages = self.imagePathsGroup.count;
     self.pageControl.currentPage = [self currentIndex];
+    self.pageControl.currentPageDotImage = self.currentPageDotImage;
+    self.pageControl.pageDotImage = self.pageDotImage;
+    self.pageControl.frame = CGRectMake(0, self.frame.size.height - 20.0 - self.pageControlBottomOffset, self.frame.size.width, 20);
+    self.pageControl.hidden = !(self.showPageControl);
     [self addSubview:self.pageControl];
 }
 
@@ -280,7 +304,8 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
         _collectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:self.flowLayout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
-        _collectionView.backgroundColor = [UIColor grayColor];
+        _collectionView.showsHorizontalScrollIndicator = NO;
+        _collectionView.backgroundColor = [UIColor clearColor];
         [_collectionView registerClass:[BDSSliderViewCell class] forCellWithReuseIdentifier:BDSSliderViewCellId];
     }
     return _collectionView;
@@ -289,6 +314,7 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 - (BDSSliderViewPageControl *)pageControl {
     if (!_pageControl) {
         _pageControl = [[BDSSliderViewPageControl alloc] init];
+        _pageControl.userInteractionEnabled = NO;
     }
     return _pageControl;
 }
@@ -318,5 +344,14 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 
 @implementation BDSSliderViewPageControl
 
+- (void)setCurrentPageDotImage:(UIImage *)currentPageDotImage {
+    _currentPageDotImage = currentPageDotImage;
+    [self setValue:currentPageDotImage forKey:@"_currentPageImage"];
+}
+
+- (void)setPageDotImage:(UIImage *)pageDotImage {
+    _pageDotImage = pageDotImage;
+    [self setValue:pageDotImage forKey:@"_pageImage"];
+}
 
 @end

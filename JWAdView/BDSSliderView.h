@@ -39,6 +39,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic) BOOL hidesForSinglePage;
 /** 是否显示分页控件 */
 @property (nonatomic, assign) BOOL showPageControl;
+/** 当前分页控件小圆标颜色 */
+@property (nonatomic, strong) UIColor *currentPageDotColor;
+/** 其他分页控件小圆标颜色 */
+@property (nonatomic, strong) UIColor *pageDotColor;
+/** 当前分页控件小圆标图片 */
+@property (nonatomic, strong) UIImage *currentPageDotImage;
+/** 其他分页控件小圆标图片 */
+@property (nonatomic, strong) UIImage *pageDotImage;
+/** 分页控件距离轮播图的底部间距（在默认间距基础上）的偏移量 */
+@property (nonatomic, assign) CGFloat pageControlBottomOffset;
 
 @property (weak, nonatomic) id<BDSSliderViewDelagete> delegate;
 
@@ -71,5 +81,10 @@ NS_ASSUME_NONNULL_END
 @end
 
 @interface BDSSliderViewPageControl : UIPageControl
+
+/** 当前分页控件小圆标图片 */
+@property (nonatomic, strong) UIImage *currentPageDotImage;
+/** 其他分页控件小圆标图片 */
+@property (nonatomic, strong) UIImage *pageDotImage;
 
 @end

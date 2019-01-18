@@ -22,6 +22,8 @@
 		7A313E1F21F04DA100A9983C /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A313E1221F04DA100A9983C /* 2.png */; };
 		7A313E2021F04DA100A9983C /* 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A313E1321F04DA100A9983C /* 3.png */; };
 		7A313E2121F04DA100A9983C /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A313E1421F04DA100A9983C /* 1.png */; };
+		7AB3C38221F1A57200AD210A /* green.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB3C38021F1A57200AD210A /* green.png */; };
+		7AB3C38321F1A57200AD210A /* red.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB3C38121F1A57200AD210A /* red.png */; };
 		B243A7311E850F2B00B2B11B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B243A7301E850F2B00B2B11B /* main.m */; };
 		B243A7341E850F2B00B2B11B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B243A7331E850F2B00B2B11B /* AppDelegate.m */; };
 		B243A7371E850F2B00B2B11B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B243A7361E850F2B00B2B11B /* ViewController.m */; };
@@ -48,6 +50,8 @@
 		7A313E1321F04DA100A9983C /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
 		7A313E1421F04DA100A9983C /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
 		7A452EF1122717F2291F3210 /* libPods-JWAdView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JWAdView.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AB3C38021F1A57200AD210A /* green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = green.png; sourceTree = "<group>"; };
+		7AB3C38121F1A57200AD210A /* red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red.png; sourceTree = "<group>"; };
 		97162E38D392324DBAB67729 /* Pods-JWAdView.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JWAdView.release.xcconfig"; path = "Pods/Target Support Files/Pods-JWAdView/Pods-JWAdView.release.xcconfig"; sourceTree = "<group>"; };
 		B243A72C1E850F2B00B2B11B /* JWAdView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JWAdView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B243A7301E850F2B00B2B11B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -87,6 +91,8 @@
 		7A313E0721F04DA100A9983C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				7AB3C38021F1A57200AD210A /* green.png */,
+				7AB3C38121F1A57200AD210A /* red.png */,
 				7A313E0821F04DA100A9983C /* 8.png */,
 				7A313E0921F04DA100A9983C /* 9.png */,
 				7A313E0A21F04DA100A9983C /* 12.png */,
@@ -223,6 +229,7 @@
 				7A313E1E21F04DA100A9983C /* 6.png in Resources */,
 				7A313E2121F04DA100A9983C /* 1.png in Resources */,
 				7A313E1B21F04DA100A9983C /* 4.png in Resources */,
+				7AB3C38321F1A57200AD210A /* red.png in Resources */,
 				7A313E1D21F04DA100A9983C /* 7.png in Resources */,
 				7A313E1A21F04DA100A9983C /* 10.png in Resources */,
 				7A313E1521F04DA100A9983C /* 8.png in Resources */,
@@ -234,6 +241,7 @@
 				7A313E1821F04DA100A9983C /* 13.png in Resources */,
 				7A313E2021F04DA100A9983C /* 3.png in Resources */,
 				7A313E1C21F04DA100A9983C /* 5.png in Resources */,
+				7AB3C38221F1A57200AD210A /* green.png in Resources */,
 				7A313E1F21F04DA100A9983C /* 2.png in Resources */,
 				B243A73A1E850F2B00B2B11B /* Main.storyboard in Resources */,
 			);
