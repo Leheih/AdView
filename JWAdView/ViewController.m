@@ -27,17 +27,17 @@
 
     NSArray *imageArr = @[@"1",@"3",@"4",@"5",@"6",@"7"];
     BDSSliderView *sliderView = [BDSSliderView sliderViewWithFrame:CGRectMake(20, 100, 300, 200) localizationImageNamesGroup:imageArr];
-    sliderView.infiniteLoop = YES;
+//    sliderView.infiniteLoop = YES;
     sliderView.delegate = self;
-    sliderView.autoScroll = YES;
+    sliderView.autoScroll = NO;
     sliderView.autoScrollTimeInterval = 2.5;
 //    sliderView.itemSize = CGSizeMake(200, 100);
     sliderView.pageSpace = 10.0f;
     [self.view addSubview:sliderView];
 }
 
-- (void)BDSSliderView:(BDSSliderView *)sliderView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%ld",indexPath.row);
+- (void)BDSSliderView:(BDSSliderView *)sliderView didSelectItemAtIndex:(NSInteger)index {
+    NSLog(@"%ld",index);
 }
 
 @end

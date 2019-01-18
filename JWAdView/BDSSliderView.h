@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class BDSSliderView;
 @protocol BDSSliderViewDelagete <NSObject>
 
-- (void)BDSSliderView:(BDSSliderView *)sliderView didSelectItemAtIndexPath:(NSIndexPath *)indexPath;
+- (void)BDSSliderView:(BDSSliderView *)sliderView didSelectItemAtIndex:(NSInteger)index;
 
 @end
 

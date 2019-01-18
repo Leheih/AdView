@@ -67,8 +67,8 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if ([self.delegate respondsToSelector:@selector(BDSSliderView:didSelectItemAtIndexPath:)]) {
-        [self.delegate BDSSliderView:self didSelectItemAtIndexPath:indexPath];
+    if ([self.delegate respondsToSelector:@selector(BDSSliderView:didSelectItemAtIndex:)]) {
+        [self.delegate BDSSliderView:self didSelectItemAtIndex:(indexPath.item % self.localizationImageNamesGroup.count)];
     }
 }
 

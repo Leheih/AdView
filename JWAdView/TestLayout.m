@@ -27,9 +27,9 @@
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-    
+    NSArray *array = [super layoutAttributesForElementsInRect:rect];
     // 获得super已经计算好的布局属性
-    NSArray *attributes = [super layoutAttributesForElementsInRect:rect];
+    NSArray *attributes = [[NSArray alloc] initWithArray:array copyItems:YES];
     // 计算collectionView最中心点的x值
     CGFloat centerX = self.collectionView.contentOffset.x + self.collectionView.frame.size.width * 0.5;
     // 在原有布局属性的基础上，进行微调
