@@ -8,6 +8,7 @@
 
 #import "BDSSliderView.h"
 #import "TestLayout.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface BDSSliderView () <
 UICollectionViewDelegate,
@@ -19,6 +20,7 @@ UICollectionViewDataSource>
 @property (assign, nonatomic) BOOL isScrollToCenter;
 @property (strong, nonatomic) NSTimer *timer;
 @property (strong, nonatomic) TestLayout *flowLayout;
+@property (strong, nonatomic) NSArray<NSString *> *imagePathsGroup;
 
 @end
 
@@ -48,7 +50,7 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 }
 
 - (void)scrollToCenter {
-    if (self.localizationImageNamesGroup.count == 0) return;
+    if (self.imagePathsGroup.count == 0) return;
     NSInteger targetIndex = self.infiniteLoop == YES ? self.totalItemsCount * 0.5 : 0;
     [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:targetIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
@@ -61,14 +63,23 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     BDSSliderViewCell *item = [collectionView dequeueReusableCellWithReuseIdentifier:BDSSliderViewCellId forIndexPath:indexPath];
-    NSInteger index = indexPath.item % self.localizationImageNamesGroup.count;
-    item.imageView.image = [UIImage imageNamed:self.localizationImageNamesGroup[index]];
+    NSInteger index = indexPath.item % self.imagePathsGroup.count;
+    NSString *imagePath = self.imagePathsGroup[index];
+    if ([imagePath hasPrefix:@"http"]) {
+        [item.imageView sd_setImageWithURL:[NSURL URLWithString:imagePath] placeholderImage:self.placeholderImage];
+    } else {
+        UIImage *image = [UIImage imageNamed:imagePath];
+        if (!image) {
+            image = [UIImage imageWithContentsOfFile:imagePath];
+        }
+        item.imageView.image = image;
+    }
     return item;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.delegate respondsToSelector:@selector(BDSSliderView:didSelectItemAtIndex:)]) {
-        [self.delegate BDSSliderView:self didSelectItemAtIndex:(indexPath.item % self.localizationImageNamesGroup.count)];
+        [self.delegate BDSSliderView:self didSelectItemAtIndex:(indexPath.item % self.imagePathsGroup.count)];
     }
 }
 
@@ -149,14 +160,23 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 
 - (void)setLocalizationImageNamesGroup:(NSArray *)localizationImageNamesGroup {
     _localizationImageNamesGroup = localizationImageNamesGroup;
-    self.totalItemsCount = self.infiniteLoop ? localizationImageNamesGroup.count * 100 : localizationImageNamesGroup.count;
-//    [self.collectionView reloadData];
+    self.imagePathsGroup = localizationImageNamesGroup;
+}
+
+- (void)setImageURLStringsGroup:(NSArray *)imageURLStringsGroup {
+    _imageURLStringsGroup = imageURLStringsGroup;
+    self.imagePathsGroup = imageURLStringsGroup;
+}
+
+- (void)setImagePathsGroup:(NSArray *)imagePathsGroup {
+    _imagePathsGroup = imagePathsGroup;
+    self.totalItemsCount = self.infiniteLoop ? imagePathsGroup.count * 100 : imagePathsGroup.count;
 }
 
 - (void)setInfiniteLoop:(BOOL)infiniteLoop {
     _infiniteLoop = infiniteLoop;
-    if (self.localizationImageNamesGroup.count) {
-        self.localizationImageNamesGroup = self.localizationImageNamesGroup;
+    if (self.imagePathsGroup.count) {
+        self.imagePathsGroup = self.imagePathsGroup;
     }
 }
 
@@ -192,7 +212,13 @@ static NSString *BDSSliderViewCellId = @"BDSSliderViewCellId";
 
 + (BDSSliderView *)sliderViewWithFrame:(CGRect)frame localizationImageNamesGroup:(NSArray *)localizationImageNamesGroup {
     BDSSliderView *sliderView = [[BDSSliderView alloc] initWithFrame:frame];
-    sliderView.localizationImageNamesGroup = localizationImageNamesGroup;
+    sliderView.imagePathsGroup = localizationImageNamesGroup;
+    return sliderView;
+}
+
++ (BDSSliderView *)sliderViewWithFrame:(CGRect)frame imageURLStringsGroup:(NSArray *)imageURLStringsGroup {
+    BDSSliderView *sliderView = [[BDSSliderView alloc] initWithFrame:frame];
+    sliderView.imagePathsGroup = imageURLStringsGroup;
     return sliderView;
 }
 

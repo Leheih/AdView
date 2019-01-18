@@ -20,7 +20,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface BDSSliderView : UIView
 
 /** 本地图片数组 */
-@property (nonatomic, strong) NSArray *localizationImageNamesGroup;
+@property (nonatomic, strong) NSArray<NSString *> *localizationImageNamesGroup;
+/** 网络图片 url string 数组 */
+@property (nonatomic, strong) NSArray<NSString *> *imageURLStringsGroup;
+/** 占位图，用于网络未加载到图片时 */
+@property (nonatomic, strong) UIImage *placeholderImage;
 /** 是否无限循环,默认Yes */
 @property (nonatomic,assign) BOOL infiniteLoop;
 /** 是否自动滚动,默认Yes */
@@ -42,6 +46,15 @@ NS_ASSUME_NONNULL_BEGIN
  @return 轮播view
  */
 + (BDSSliderView *)sliderViewWithFrame:(CGRect)frame localizationImageNamesGroup:(NSArray *)localizationImageNamesGroup;
+
+/**
+ 网络图片轮播初始化
+
+ @param frame frame
+ @param imageURLStringsGroup 网络图片URL
+ @return 轮播view
+ */
++ (BDSSliderView *)sliderViewWithFrame:(CGRect)frame imageURLStringsGroup:(NSArray *)imageURLStringsGroup;
 
 @end
 

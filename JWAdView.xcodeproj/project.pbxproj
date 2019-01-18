@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08E72303BF03BC341E3C326C /* libPods-JWAdView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A452EF1122717F2291F3210 /* libPods-JWAdView.a */; };
 		7A313E0621F0476E00A9983C /* BDSSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A313E0521F0476E00A9983C /* BDSSliderView.m */; };
 		7A313E1521F04DA100A9983C /* 8.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A313E0821F04DA100A9983C /* 8.png */; };
 		7A313E1621F04DA100A9983C /* 9.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A313E0921F04DA100A9983C /* 9.png */; };
@@ -46,6 +47,8 @@
 		7A313E1221F04DA100A9983C /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
 		7A313E1321F04DA100A9983C /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
 		7A313E1421F04DA100A9983C /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
+		7A452EF1122717F2291F3210 /* libPods-JWAdView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JWAdView.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		97162E38D392324DBAB67729 /* Pods-JWAdView.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JWAdView.release.xcconfig"; path = "Pods/Target Support Files/Pods-JWAdView/Pods-JWAdView.release.xcconfig"; sourceTree = "<group>"; };
 		B243A72C1E850F2B00B2B11B /* JWAdView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JWAdView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B243A7301E850F2B00B2B11B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B243A7321E850F2B00B2B11B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -58,6 +61,7 @@
 		B243A7401E850F2C00B2B11B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B243A7461E85220600B2B11B /* TestLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestLayout.h; sourceTree = "<group>"; };
 		B243A7471E85220600B2B11B /* TestLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestLayout.m; sourceTree = "<group>"; };
+		CD81DFB8795759983D401EA4 /* Pods-JWAdView.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JWAdView.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JWAdView/Pods-JWAdView.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,12 +69,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08E72303BF03BC341E3C326C /* libPods-JWAdView.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A7853E9D104D75424BE74D4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7A452EF1122717F2291F3210 /* libPods-JWAdView.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7A313E0721F04DA100A9983C /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -96,6 +109,8 @@
 			children = (
 				B243A72E1E850F2B00B2B11B /* JWAdView */,
 				B243A72D1E850F2B00B2B11B /* Products */,
+				D3E4EBA08C802620F4D1CA8A /* Pods */,
+				1A7853E9D104D75424BE74D4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -136,6 +151,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		D3E4EBA08C802620F4D1CA8A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CD81DFB8795759983D401EA4 /* Pods-JWAdView.debug.xcconfig */,
+				97162E38D392324DBAB67729 /* Pods-JWAdView.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -143,6 +167,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B243A7431E850F2C00B2B11B /* Build configuration list for PBXNativeTarget "JWAdView" */;
 			buildPhases = (
+				6BE8EA4BC97642A4ECB472CA /* [CP] Check Pods Manifest.lock */,
 				B243A7281E850F2B00B2B11B /* Sources */,
 				B243A7291E850F2B00B2B11B /* Frameworks */,
 				B243A72A1E850F2B00B2B11B /* Resources */,
@@ -215,6 +240,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6BE8EA4BC97642A4ECB472CA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-JWAdView-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B243A7281E850F2B00B2B11B /* Sources */ = {
@@ -343,6 +393,7 @@
 		};
 		B243A7441E850F2C00B2B11B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CD81DFB8795759983D401EA4 /* Pods-JWAdView.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6X387JEA84;
@@ -355,6 +406,7 @@
 		};
 		B243A7451E850F2C00B2B11B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97162E38D392324DBAB67729 /* Pods-JWAdView.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6X387JEA84;
